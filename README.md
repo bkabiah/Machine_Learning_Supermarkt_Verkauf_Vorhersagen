@@ -1,8 +1,39 @@
 # Big Mart Umsatzprognose
 
+## Einführung
+
+Dieses Projekt beschäftigt sich mit der Vorhersage von Produktverkäufen in verschiedenen Filialen der Supermarktkette „Big Mart" mithilfe von Methoden des maschinellen Lernens. Der zugrunde liegende Datensatz umfasst über 8.500 Einträge mit detaillierten Informationen zu Produkteigenschaften – wie Gewicht, Fettgehalt, Sichtbarkeit im Regal und Preis – sowie zu den jeweiligen Filialen, darunter Größe, Standorttyp und Gründungsjahr. Ziel ist es, ein robustes Regressionsmodell zu entwickeln, das den Umsatz eines Produkts in einer bestimmten Filiale (`Item_Outlet_Sales`) möglichst präzise vorhersagen kann. Solche Prognosen sind für Einzelhandelsunternehmen von großer Bedeutung, da sie eine datengestützte Optimierung der Lagerbestände, der Filialplanung und der Marketingstrategien ermöglichen. Im Rahmen dieses Projekts werden die Daten umfassend vorverarbeitet, fehlende Werte behandelt, kategoriale Merkmale kodiert und schließlich ein **XGBoost Regressor** trainiert und evaluiert.
+
+
 ## Projektübersicht
 Dieses Projekt zielt darauf ab, die Verkäufe verschiedener Produkte in verschiedenen Big Mart-Filialen vorherzusagen. Der Datensatz enthält Informationen über Produkte, deren Eigenschaften und die Filialen, in denen sie verkauft werden. Das Ziel ist es, ein maschinelles Lernmodell zu entwickeln, das den `Item_Outlet_Sales` genau vorhersagen kann.
 
+## Architekturdiagramm
+
+```mermaid
+flowchart TD
+    A[(Train.csv<br/>Rohdaten)] --> B[Daten laden<br/>Pandas DataFrame]
+    B --> C{Fehlende Werte?}
+    C -->|Item_Weight| D[Imputation mit<br/>Mittelwert]
+    C -->|Outlet_Size| E[Imputation mit<br/>Modus je Outlet_Type]
+    D --> F[Datenbereinigung]
+    E --> F
+    F --> G[Standardisierung<br/>Item_Fat_Content]
+    G --> H[Label Encoding<br/>kategorialer Merkmale]
+    H --> I[Train/Test Split<br/>80% / 20%]
+    I --> J[XGBoost Regressor<br/>Modelltraining]
+    J --> K[Evaluierung<br/>R² Metrik]
+    K --> L[Train R²: 0.876]
+    K --> M[Test R²: 0.501]
+    J --> N[Vorhersage<br/>Item_Outlet_Sales]
+
+    style A fill:#4CAF50,color:#fff
+    style J fill:#2196F3,color:#fff
+    style N fill:#FF9800,color:#fff
+    style L fill:#8BC34A,color:#fff
+    style M fill:#FFC107,color:#000
+
+```
 ## Datensatz
 Der für dieses Projekt verwendete Datensatz ist `Train.csv` und enthält verschiedene Merkmale im Zusammenhang mit Produkten und Filialen.
 
